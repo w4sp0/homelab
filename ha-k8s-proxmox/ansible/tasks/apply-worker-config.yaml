@@ -1,0 +1,9 @@
+---
+- name: Apply config to worker nodes
+  ansible.builtin.command:
+    cmd: >
+      talosctl apply-config
+      --nodes {{ item }}
+      --file {{ output_directory }}/worker.yaml
+      --insecure
+  loop: "{{ talos_worker_ips }}"

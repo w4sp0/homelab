@@ -1,0 +1,11 @@
+---
+- name: Apply config to control plane nodes
+  ansible.builtin.command:
+    cmd: >
+      talosctl apply-config
+      --nodes {{ item }}
+      --file {{ output_directory }}/controlplane-{{ idx + 1 }}.yaml
+      --insecure
+  loop: "{{ talos_control_ips }}"
+  loop_control:
+    index_var: idx

@@ -1,0 +1,29 @@
+---
+- name: Generate base Talos machine configs
+  ansible.builtin.command:
+    cmd: >
+      talosctl gen config
+      {{ cluster_name }}
+      {{ kubernetes_endpoint }}
+      --with-secrets {{ output_directory }}/secrets.yaml
+      --output {{ output_directory }}
+      --force
+  args:
+    chdir: "{{ playbook_dir }}"
+
+- name: Generate per-node control plane configs
+  ansible.builtin.command:
+    cmd: >
+      talosctl gen config
+      {{ cluster_name }}
+      {{ kubernetes_endpoint }}
+      --with-secrets {{ output_directory }}/secrets.yaml
+      --output-types controlplane
+      --output {{ output_directory }}/controlplane-{{ idx + 1 }}.yaml
+      --config-patch-control-plane @../talos/patches/controlplane-{{ idx + 1 }}.yaml
+      --force
+  args:
+    chdir: "{{ playbook_dir }}"
+  loop: "{{ talos_control_ips }}"
+  loop_control:
+    index_var: idx

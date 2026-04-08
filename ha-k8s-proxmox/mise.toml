@@ -1,3 +1,4 @@
 [tools]
 ansible = "latest"
 opentofu = "latest"
+talosctl = "latest"

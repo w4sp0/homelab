@@ -1,0 +1,9 @@
+cluster:
+  allowSchedulingOnControlPlanes: false
+machine:
+  network:
+    interfaces:
+      - interface: ens18
+        dhcp: true
+        vip:
+          ip: 10.0.0.199

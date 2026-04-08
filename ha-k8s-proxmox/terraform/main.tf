@@ -43,7 +43,7 @@ resource "proxmox_vm_qemu" "talos_control" {
       model   = "virtio"
       bridge  = "vmbr0"
       macaddr = network.value.macaddr
-      tag     = network.value.tag != null ? network.value.tag : -1
+      tag     = network.value.tag != null ? network.value.tag : 0
     }
   }
 
@@ -103,7 +103,7 @@ resource "proxmox_vm_qemu" "talos_worker" {
       model   = "virtio"
       bridge  = "vmbr0"
       macaddr = network.value.macaddr
-      tag     = network.value.tag
+      tag     = network.value.tag != null ? network.value.tag : 0 
     }
   }
 
