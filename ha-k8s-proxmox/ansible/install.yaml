@@ -1,0 +1,10 @@
+vars:
+  cluster_name: "devel-cluster"
+  output_directory: "../rendered/"
+  talos_configuration_location: "../rendered/talosconfig"
+  talos_control_ip: "10.0.0.142"
+  talos_control_ips: 
+    - "10.0.0.142"
+    - "10.0.0.143"
+    - "10.0.0.144"
+  talos_worker_ips: []
