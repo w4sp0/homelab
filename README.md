@@ -5,8 +5,7 @@ Infrastructure as Code for a multi-platform homelab environment.
 ## Warning
 
 **Warning**: Not ready for production, development only. Breaking changes can
-and will be introduced. Configuration values are specific to this environment
-and must be adapted for other deployments.
+and will be introduced. Configuration values are specific to this environment and must be adapted for other deployments.
 
 ## Table of Contents
 

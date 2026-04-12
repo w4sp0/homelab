@@ -1,0 +1,64 @@
+---
+- name: Ensure Docker apt keyring directory exists
+  ansible.builtin.file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: "0755"
+
+- name: Add Docker GPG key
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: "0644"
+    force: false
+
+- name: Add Docker apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [arch={{ ansible_architecture | replace('x86_64', 'amd64') }} signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable"
+    filename: docker
+    state: present
+    update_cache: true
+
+- name: Install Docker Engine and Compose plugin
+  ansible.builtin.apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-compose-plugin
+    state: present
+
+- name: Ensure Docker service is enabled and running
+  ansible.builtin.systemd:
+    name: docker
+    enabled: true
+    state: started
+
+- name: Ensure homepage install directory exists
+  ansible.builtin.file:
+    path: "{{ homepage_install_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Sync homepage config from repo to LXC
+  ansible.posix.synchronize:
+    src: "{{ homepage_repo_dir }}/"
+    dest: "{{ homepage_install_dir }}/"
+    delete: true
+    rsync_opts:
+      - "--exclude=.git"
+  register: homepage_sync
+
+- name: Bring up homepage with docker compose
+  ansible.builtin.command:
+    cmd: docker compose up -d --remove-orphans
+    chdir: "{{ homepage_install_dir }}"
+  register: homepage_compose
+  changed_when: "'Started' in homepage_compose.stderr or 'Created' in homepage_compose.stderr or 'Recreated' in homepage_compose.stderr"
+
+- name: Restart homepage if config changed
+  ansible.builtin.command:
+    cmd: docker compose restart
+    chdir: "{{ homepage_install_dir }}"
+  when: homepage_sync.changed
+  changed_when: true

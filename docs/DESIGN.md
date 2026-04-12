@@ -36,6 +36,7 @@ before adding more.
 
 Markdown must follow
 [Google's Markdown style guide](https://google.github.io/styleguide/docguide/style.html).
+Any discrepancies with Google's style guide must be fixed or documented here with clear rational. Although some of Google's style guide is optional, we enforce some of stylistic purpose via documentation linting tools.
 
 Documentation must not duplicate itself, but reference one another.
 Reproducing instructions that can be found in upstream documentation is
@@ -91,38 +92,77 @@ Consistent naming across platforms makes resources identifiable at a glance.
 
 VMIDs encode the Proxmox host and role:
 
-*   First digit: Proxmox host number (`1` = pve0, `2` = pve2, `3` = pve3)
+*   First digit: Proxmox host number (`1` = pve1, `2` = pve2, `3` = pve3)
 *   Second digit: role (`1` = control plane, `2` = worker)
 *   Third-fourth digits: instance within role (`10`, `20`, `21`)
 
-Examples: `1110` = pve0, control plane, instance 1.
+Examples: `1110` = pve1, control plane, instance 1.
 `2121` = pve2, worker, instance 2.
 
 #### Hostnames
 
 *   Servers and infrastructure: `role-N` (e.g., `pve0`, `dns-1`)
-*   Workstations: descriptive name (e.g., `rogers-macbook-air`)
+*   Workstations: location-os-purpose (e.g., `no-macair-work`)
 
 #### Qubes OS qubes
 
-Follow the Qusal naming convention:
+Follow the Qusal naming convention listed in Qubes OS's [DESIGN.md](../qubes-config/docs/DESIGN.md) document.
 
-*   **TemplateVM**: `tpl-NAME`
-*   **AppVM**: `NAME` or `domain-purpose` (e.g., `personal-banking`)
-*   **DispVM**: `disp-NAME`
-*   **DispVM Template**: `dvm-NAME`
-*   **Service qubes**: `sys-NAME`
 
 ### Network allocation
 
 | Subnet         | Purpose                              |
 |----------------|--------------------------------------|
-| 10.0.0.0/24    | Proxmox VM network                   |
-| 10.0.0.1       | Gateway                              |
-| 10.0.0.142-144 | Kubernetes control planes (static)   |
-| 10.0.0.147-152 | Kubernetes workers (DHCP)            |
-| 10.0.0.199     | Kubernetes API VIP                   |
+| 10.0.0.1   | pfSense gateway                                |
+| 10.0.0.2   | pve0-nic0 (management) [TODO: currently .10]   |
+| 10.0.0.3   | pve2 (management) [current]                    |
+| 10.0.0.4   | pve3 (management) [current: .3]                |
+| 10.0.0.5-9 | Reserved (future Proxmox nodes)                |
+| 10.0.0.10  | step-ca (internal CA)    |
+| 10.0.0.11  | kanidm (SSO / IdP    |
+| 10.0.0.12  | victoria-metrics     |
+| 10.0.0.13  | grafana  |
+| 10.0.0.14  | gitea    |
+| 10.0.0.15  | homepage     |
+| 10.0.0.16  | victoria-logs    |   
+| 10.0.0.17  | ntfy (push notifications)    |
+| 10.0.0.18-19 | Reserved (future infrastructure services)    |
+| 10.0.0.20     | Kubernetes cluster 1 API VIP  |
+| 10.0.0.21     | K8s cluster 1 control plane 1 (pve1) |
+| 10.0.0.22     | K8s cluster 1 control plane 2 (pve2) |
+| 10.0.0.23     | K8s cluster 1 control plane 3 (pve3) |
+| 10.0.0.24-29  | Reserved (future clusters VIP + control planes) |
+| 10.0.0.31     | K8s cluster 1 worker 1 (pve0)     | 
+| 10.0.0.32     | K8s cluster 1 worker 2 (pve0)     |   
+| 10.0.0.33     | K8s cluster 1 worker 3 (pve2)     | 
+| 10.0.0.34     | K8s cluster 1 worker 4 (pve2)     | 
+| 10.0.0.35     | K8s cluster 1 worker 5 (pve3)     | 
+| 10.0.0.36     | K8s cluster 1 worker 6 (pve3)     | 
+| 10.0.0.37-49  | Reserved (future cluster workers) |
+| 10.0.0.51     | ai-gpu-1 (pve2, RTX 2080 Ti) |
+| 10.0.0.52     | ai-gpu-2 (pve3, RTX 2060) |
+| 10.0.0.53-59  | Reserved (future AI/ML) |
+| 10.0.0.61     | blackarch (pve1) |
+| 10.0.0.62     | remnux (pve1) |
+| 10.0.0.63-79  | Reserved (future security lab) |
+| 10.0.0.80-99  | Reserved (future services) |
+| 10.0.0.100-199 | DHCP pool (dynamic assignments)|
+| 10.0.0.200-254 | Reserved |
 | 100.x.x.x/10   | Tailscale overlay                    |
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 When adding new subnets or static IPs, update this table and the
 corresponding subproject documentation.
@@ -147,8 +187,8 @@ by reading only its README and the top-level docs.
 homelab/
 |-- docs/                  # Cross-cutting documentation
 |-- ha-k8s-proxmox/        # Kubernetes cluster on Proxmox
-|-- qubes/                 # Qubes OS configuration
-|-- nixos/                 # NixOS machine configurations
+|-- qubes-config/          # Qubes OS configuration
+|-- nixos-config/          # NixOS machine configurations
 |-- darwin/                # macOS nix-darwin configuration
 ```
 

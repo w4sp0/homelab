@@ -56,3 +56,28 @@ variable "talos_worker_configuration" {
   }))
   default = []
 }
+
+variable "lxc_template" {
+  type        = string
+  description = "Proxmox LXC template path, e.g. local:vztmpl/debian-13-standard_13.0-1_amd64.tar.zst"
+}
+
+variable "lxc_ssh_public_keys" {
+  type        = string
+  description = "SSH public key(s) to inject into service LXCs, newline-separated"
+}
+
+variable "homepage_configuration" {
+  type = object({
+    pm_node   = string
+    vmid      = number
+    hostname  = string
+    cpu_cores = number
+    memory    = number
+    swap      = number
+    disk_size = string
+    storage   = string
+    macaddr   = string
+  })
+  description = "Homepage dashboard LXC configuration"
+}

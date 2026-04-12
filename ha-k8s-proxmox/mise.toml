@@ -1,4 +1,4 @@
 [tools]
-ansible = "latest"
+ansible = { version = "latest", pipx_args = "--include-deps", uvx = "false" }
 opentofu = "latest"
 talosctl = "latest"

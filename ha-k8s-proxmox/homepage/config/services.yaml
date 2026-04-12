@@ -1,0 +1,14 @@
+- Infrastructure:
+    - Proxmox pve0:
+        href: https://pve0-nic0:8006
+        description: Hypervisor node pve0
+    - Proxmox pve2:
+        href: https://pve2:8006
+        description: Hypervisor node pve2
+    - Proxmox pve3:
+        href: https://pve3:8006
+        description: Hypervisor node pve3
+
+- Kubernetes:
+    - Talos cluster:
+        description: devel-cluster (3 control / 6 workers)

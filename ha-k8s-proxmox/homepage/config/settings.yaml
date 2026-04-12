@@ -1,0 +1,11 @@
+title: Homelab
+headerStyle: clean
+theme: dark
+color: slate
+layout:
+  Infrastructure:
+    style: row
+    columns: 3
+  Kubernetes:
+    style: row
+    columns: 3

@@ -1,0 +1,8 @@
+all:
+  children:
+    services:
+      hosts:
+        homepage:
+          ansible_host: 10.0.0.158
+          ansible_user: root
+          ansible_python_interpreter: /usr/bin/python3

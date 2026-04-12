@@ -69,7 +69,7 @@ resource "proxmox_vm_qemu" "talos_control" {
   }
 
   lifecycle {
-    ignore_changes = [disk, vm_state]
+    ignore_changes = [disk, vm_state, startup_shutdown]
   }
 
   tags = "kubernetes,control"
@@ -129,8 +129,47 @@ resource "proxmox_vm_qemu" "talos_worker" {
   }
 
   lifecycle {
-    ignore_changes = [disk, vm_state]
+    ignore_changes = [disk, vm_state, startup_shutdown]
   }
 
   tags = "kubernetes,worker"
+}
+
+resource "proxmox_lxc" "homepage" {
+  target_node  = var.homepage_configuration.pm_node
+  vmid         = var.homepage_configuration.vmid
+  hostname     = var.homepage_configuration.hostname
+  description  = "Homepage dashboard (single pane of glass for the homelab)"
+  ostemplate   = var.lxc_template
+  unprivileged = true
+  onboot       = true
+  start        = true
+
+  ssh_public_keys = var.lxc_ssh_public_keys
+
+  cores  = var.homepage_configuration.cpu_cores
+  memory = var.homepage_configuration.memory
+  swap   = var.homepage_configuration.swap
+
+  rootfs {
+    storage = var.homepage_configuration.storage
+    size    = var.homepage_configuration.disk_size
+  }
+
+  network {
+    name   = "eth0"
+    bridge = "vmbr0"
+    ip     = "dhcp"
+    hwaddr = var.homepage_configuration.macaddr
+  }
+
+  features {
+    nesting = true
+  }
+
+  lifecycle {
+    ignore_changes = [ostemplate]
+  }
+
+  tags = "services,homepage"
 }

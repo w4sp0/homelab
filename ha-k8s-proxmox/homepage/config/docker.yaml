@@ -1,0 +1,2 @@
+# Docker provider config — intentionally empty.
+# Auto-discovery will be enabled later; services are declared statically in services.yaml for now.

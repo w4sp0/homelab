@@ -1,0 +1,19 @@
+- name: Deploy homepage dashboard
+  hosts: homepage
+  gather_facts: true
+  vars:
+    homepage_repo_dir: "{{ playbook_dir }}/../homepage"
+    homepage_install_dir: /opt/homepage
+  tasks:
+    - name: Install base packages
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - rsync
+        state: present
+        update_cache: true
+
+    - name: Include Docker install + deploy tasks
+      ansible.builtin.include_tasks: tasks/deploy-homepage.yaml

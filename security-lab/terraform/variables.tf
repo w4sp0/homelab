@@ -30,3 +30,15 @@ variable "remnux_config" {
   })
   description = "REMnux VM configuration"
 }
+
+variable "blackarch_config" {
+  type = object({
+    pm_node   = string
+    vmid      = number
+    vm_name   = string
+    cpu_cores = number
+    memory    = number
+    disk_size = string
+  })
+  description = "BlackArch VM configuration"
+}
