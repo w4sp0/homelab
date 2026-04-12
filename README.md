@@ -88,9 +88,9 @@ homelab/
 |   |-- docs/                     # Proxmox cluster documentation
 |   |-- homepage/                 # Single pane of glass service access
 |   |-- kubernetes/               # Kubernetes cluster configuration
-|   |   |-- ansible/              # Talos os configuration
-|   |   |-- talos/                # Machine config patches
-|   |   |-- terraform/            # VM provisioning (OpenTofu)
+|   |-- |-- ansible/              # Talos os configuration
+|   |-- |-- talos/                # Machine config patches
+|   |-- |-- terraform/            # VM provisioning (OpenTofu)
 |-- qubes-config/                 # Qubes OS SaltStack formulas (submodule)
 |-- nixos-config/                 # NixOS flake configurations (submodule)
 |-- darwin/                       # macOS nix-darwin configs (planned)
