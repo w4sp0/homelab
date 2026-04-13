@@ -1,6 +1,4 @@
-# Bootstrap
-
-Homelab bootstrap strategy.
+# Homelab bootstrap strategy.
 
 ## Table of Contents
 
