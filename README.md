@@ -37,7 +37,7 @@ service can be rebuilt from this repository.
 
 | Platform   | Tooling              | Purpose                              |
 |------------|----------------------|--------------------------------------|
-| Proxmox VE | OpenTofu, Ansible   | Hypervisor, VM provisioning          |
+| Proxmox VE | OpenTofu, Ansible    | Hypervisor, VM provisioning          |
 | Talos Linux| talosctl, Ansible    | Immutable Kubernetes nodes           |
 | Qubes OS   | SaltStack            | Security-focused workstation         |
 | NixOS      | Nix flakes           | Declarative Linux machines           |

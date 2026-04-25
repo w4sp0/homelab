@@ -1,57 +1,58 @@
-variable "pm_api_url" {
-  type        = string
-  description = "Proxmox API URL, e.g. https://pve1.lan:8006/api2/json"
+variable "pm_api_token" {
+  type = string
+  sensitive = true
 }
 
-variable "pm_username" {
-  type        = string
-  description = "Proxmox user, e.g. root@pam"
+variable "talos_iso_url" {
+  type = string
 }
 
-variable "pm_api_token_id" {
+variable "cluster_name" {
   type        = string
-  description = "API token ID, e.g. root@pam!terraform"
+  description = "Cluster name, e.g. homelab"
 }
 
-variable "pm_api_token_secret" {
+variable "cluster_vip" {
   type        = string
-  sensitive   = true
-  description = "API token secret UUID"
+  description = "Cluster API VIP"
 }
 
-variable "talos_iso_file" {
+variable "bootstrap_node_ip" {
   type        = string
-  description = "Proxmox ISO path, e.g. local:iso/metal-amd64.iso"
+  description = "IP of the first control plane"
 }
+
 
 variable "talos_control_configuration" {
   type = list(object({
-    pm_node   = string
-    vmid      = number
-    vm_name   = string
-    cpu_cores = number
-    memory    = number
-    disk_size = string
-    networks  = list(object({
-      id      = number
-      macaddr = string
-      tag     = optional(number, 0)
+    pm_node      = string
+    vmid         = number
+    vm_name      = string
+    cpu_cores    = number
+    memory       = number
+    disk_size    = number
+    ip_address   = string
+    networks     = list(object({
+      id         = number
+      macaddr    = string
+      tag        = optional(number, 0)
     }))
   }))
 }
 
 variable "talos_worker_configuration" {
   type = list(object({
-    pm_node   = string
-    vmid      = number
-    vm_name   = string
-    cpu_cores = number
-    memory    = number
-    disk_size = string
-    networks  = list(object({
-      id      = number
-      macaddr = string
-      tag     = optional(number)
+    pm_node      = string
+    vmid         = number
+    vm_name      = string
+    cpu_cores    = number
+    memory       = number
+    disk_size    = number
+    ip_address   = string
+    networks     = list(object({
+      id         = number
+      macaddr    = string
+      tag        = optional(number)
     }))
   }))
   default = []
