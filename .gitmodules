@@ -1,6 +1,0 @@
-[submodule "qubes-config"]
-	path = qubes-config
-	url = git@github.com:w4sp0/qubes-config.git
-[submodule "nixos-config"]
-	path = nixos-config
-	url = git@github.com:w4sp0/nixos-config.git
