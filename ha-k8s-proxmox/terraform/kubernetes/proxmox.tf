@@ -5,7 +5,7 @@ locals {
   )))
 }
 
-resource "proxmox_virtual_environment_download_file" "talos_iso" {
+resource "proxmox_download_file" "talos_iso" {
   for_each = local.pm_nodes
 
   content_type        = "iso"
@@ -20,7 +20,7 @@ resource "proxmox_virtual_environment_vm" "talos_control" {
   for_each = { for config in var.talos_control_configuration : config.vmid => config }
   name        = each.value.vm_name
   description = "Talos control plane node"
-  tags        = ["control", "kubernetes"]
+  tags        = ["platform:kubernetes", "role:control", "stage:dev"]
 
   node_name = each.value.pm_node
   vm_id     = each.value.vmid

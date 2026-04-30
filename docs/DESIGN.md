@@ -70,12 +70,9 @@ tooling across platforms unless there is a clear justification.
 
 | Platform   | Tool           | Language/Format        |
 |------------|----------------|------------------------|
-| Proxmox VE | OpenTofu      | HCL                    |
+| Proxmox VE | OpenTofu       | HCL                    |
 | Talos Linux| talosctl       | YAML                   |
 | Orchestration | Ansible     | YAML                   |
-| Qubes OS   | SaltStack      | SLS (YAML/Jinja)       |
-| NixOS      | Nix flakes     | Nix                    |
-| macOS      | nix-darwin     | Nix                    |
 
 ### Resource naming
 
@@ -89,29 +86,54 @@ Consistent naming across platforms makes resources identifiable at a glance.
 
 #### VMID allocation
 
-VMIDs encode the Proxmox host and role:
+VMIDs follow a 3-digit convention:
 
-*   First digit: Proxmox host number (`1` = pve0, `2` = pve2, `3` = pve3)
-*   Second digit: role (`1` = control plane, `2` = worker)
-*   Third-fourth digits: instance within role (`10`, `20`, `21`)
+|   Range   |   Platform    |
+|-----------|---------------|
+|   1xx     |   infra       |
+|   2xx     |   kubernetes  |
+|   3xx     |   security    |
+|   4xx     |   lab         |
+|   9xx     |   ephemeral   |
 
-Examples: `1110` = pve0, control plane, instance 1.
-`2121` = pve2, worker, instance 2.
+The second digit is a platform-defined subrole (e.g., kubernetes uses `0`
+for control plane, `1` for worker). The third digit is the instance index
+within that subrole.
+
+Examples:
+
+*   `200` = kubernetes, control plane, instance 0.
+*   `213` = kubernetes, worker, instance 3.
+*   `300` = security, pentest, instance 0.
+
+#### MAC address allocation
+
+MAC address allocation follows the standard Proxmox conventions, where the last
+two octets are the `VMID` as big-endian hex.
+
+Format: `BC:24:13:<platform>:<vmid_hi>:<vmid_lo>`
+
+Examples:
+
+*   VMID `213` -> `BC:24:13:02:00:D5`
+*   VMID `300` -> `BC:24:13:03:01:2C`
+
+NOTE: existing Talos VM MACs are grandfathered until natural rebuild.
 
 #### Hostnames
 
 *   Servers and infrastructure: `role-N` (e.g., `pve0`, `dns-1`)
-*   Workstations: descriptive name (e.g., `rogers-macbook-air`)
 
-#### Qubes OS qubes
+#### VM tags
 
-Follow the Qusal naming convention:
+Every managed VM carries three required tag axes, in the following order:
+`platform:` / `role:` / `stage:`.
 
-*   **TemplateVM**: `tpl-NAME`
-*   **AppVM**: `NAME` or `domain-purpose` (e.g., `personal-banking`)
-*   **DispVM**: `disp-NAME`
-*   **DispVM Template**: `dvm-NAME`
-*   **Service qubes**: `sys-NAME`
+|   Axis      |   Allowed values                                             |
+|-------------|--------------------------------------------------------------|
+| `platform:` | `kubernetes`, `security`, `infra`, `lab`                     |
+| `role:`     | function (e.g. `control`, `worker`, `pentest`, `monitoring`) |
+| `stage:`    | `dev`, `prod`                                                |
 
 ### Network allocation
 
@@ -143,13 +165,16 @@ Each subproject lives in its own top-level directory and must be
 self-contained: it should be possible to understand and operate a subproject
 by reading only its README and the top-level docs.
 
-```
-homelab/
-|-- docs/                  # Cross-cutting documentation
-|-- ha-k8s-proxmox/        # Kubernetes cluster on Proxmox
-|-- qubes/                 # Qubes OS configuration
-|-- nixos/                 # NixOS machine configurations
-|-- darwin/                # macOS nix-darwin configuration
+```bash
+.
+|-- docs
+|   `-- adr
+`-- ha-k8s-proxmox
+    `-- terraform
+        |-- blackarch
+        `-- kubernetes
+            `-- talos
+                `-- patches
 ```
 
 ### Adding a new subproject
