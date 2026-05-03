@@ -1,0 +1,49 @@
+gitea:
+  vm_id:      101
+  ip_address: "192.168.1.150/24"
+  cpu_cores:  2
+  memory:     2048
+  disk_size:  8
+  tags:       ["infra", "repositories", "dev"]
+  description: "# Gitea\n\n<a href='http://192.168.1.150:8096'>http://192.168.1.150:8096</a>"
+
+victorialogs:
+  vm_id:      102
+  ip_address: "192.168.1.151/24"
+  memory:     256
+  nesting:    false   # no Docker needed, save overhead
+  tags:       [music]
+
+home:
+  vm_id:      103
+  ip_address: "192.168.1.152/24"
+  memory:     256
+  protection: true    # prevent accidental deletion
+  tags:       [security]
+
+pihole:
+  vm_id:      104
+  ip_address: "192.168.1.153/24"
+  cpu_cores:  4
+  memory:     4096
+  disk_size:  16
+  tags:       [photos]
+  mount_features: [nfs]  # enable NFS mounts inside the container
+
+vaultwarden:
+  vm_id:      105
+  ip_address: "192.168.1.153/24"
+  cpu_cores:  4
+  memory:     4096
+  disk_size:  16
+  tags:       [photos]
+  mount_features: [nfs]  # enable NFS mounts inside the container
+
+nextcloud:
+  vm_id:      106
+  ip_address: "192.168.1.153/24"
+  cpu_cores:  4
+  memory:     4096
+  disk_size:  16
+  tags:       [photos]
+  mount_features: [nfs]  # enable NFS mounts inside the container

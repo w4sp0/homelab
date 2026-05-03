@@ -207,17 +207,3 @@ by reading only its README and the top-level docs.
 1.  Follow the [Proxmox upgrade guide](https://pve.proxmox.com/wiki/Upgrade).
 2.  Upgrade one node at a time to maintain cluster availability.
 3.  Verify VM connectivity after each node upgrade.
-
-### NixOS / nix-darwin upgrade
-
-1.  Update flake inputs (`nix flake update`).
-2.  Build and test locally before applying (`nixos-rebuild build`).
-3.  Apply to the target machine.
-
-### Qubes OS upgrade
-
-1.  Subscribe to
-    [qubes-announce](https://www.qubes-os.org/support/#qubes-announce) for
-    release notifications.
-2.  Follow the official upgrade procedure.
-3.  Re-apply SaltStack formulas and verify qube functionality.

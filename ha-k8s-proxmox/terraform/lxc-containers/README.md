@@ -1,4 +1,4 @@
-# Gitea
+# LXC Containers
 
 Self-hosted Gitea LXC on Proxmox. Read-only mirror of GitHub repositories,
 reachable over Tailscale.
@@ -15,6 +15,16 @@ reachable over Tailscale.
 
 ## Description
 
+A set of service instances ruing in a Proxmox LXC, used for a variety of
+functionalities, including:
+
+*   nextcloud
+*   pihole
+*   grafana + prometheus
+*   homepage
+*   vaultwarden
+*   gitea
+
 A Gitea instance running in a Proxmox LXC, used as a local read-only mirror
 of GitHub. The instance is independent of the Kubernetes cluster: it must
 remain operational while K8s is down, since it holds the manifests K8s boots
@@ -28,13 +38,13 @@ no public ingress.
 Three-tier replication of repository content:
 
 ```
+dev qube on Qubes workstation
+   |
+   v
 GitHub (source of truth)
    |  pull-mirror over HTTPS (Gitea-initiated, scheduled)
    v
 Gitea LXC on Proxmox (homelab mirror, on tailnet)
-   |  fetch --mirror over Tailscale (sys-git-initiated, scheduled)
-   v
-sys-git qube on Qubes workstation (offline-survivable mirror)
 ```
 
 **Push path.** Developer commits flow `dev qube -> GitHub`. Neither Gitea
